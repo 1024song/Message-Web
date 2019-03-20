@@ -108,6 +108,10 @@ public class UserService {
         return userDao.selectById(id);
     }
 
+    public User getUser(String username){
+        return userDao.selectByName(username);
+    }
+
     public void logout(String ticket) {
         loginTicketDAO.updateStatus(ticket, 1);
     }

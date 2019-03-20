@@ -1,5 +1,9 @@
 package com.mysql.controller;
 
+import com.mysql.async.EventModel;
+import com.mysql.async.EventProducer;
+import com.mysql.async.EventType;
+import com.mysql.model.User;
 import com.mysql.service.UserService;
 import com.mysql.util.ToutiaoUtil;
 import org.slf4j.Logger;
@@ -19,6 +23,9 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = {"/reg/"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
@@ -62,6 +69,9 @@ public class LoginController {
                     cookie.setMaxAge(3600*24*5);
                 }
                 response.addCookie(cookie);
+                User user = userService.getUser(username);
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId(user.getId())
+                .setExt("username",username).setExt("to","1164453353@qq.com"));
                 return ToutiaoUtil.getJSONString(0,"登陆成功");
             }else{
                 return ToutiaoUtil.getJSONString(1,map);

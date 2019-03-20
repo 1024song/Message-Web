@@ -27,7 +27,7 @@ public class LikeHandler implements EventHander {
     public void doHandle(EventModel model) {
         //System.out.println("Liked");
         Message message = new Message();
-        message.setFromId(3);
+        message.setFromId(model.getActorId());
         message.setToId(model.getEntityOwnerId());
         User user = userService.getUser(model.getActorId());
         message.setContent("用户" + user.getName()
